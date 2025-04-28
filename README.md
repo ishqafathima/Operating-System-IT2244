@@ -82,6 +82,8 @@ Steps to Create the Script
                   set /a age=%current_year% - %birth_year%
                   echo You are %age% years old.
                   pause
+
+                  
       ![1](https://github.com/user-attachments/assets/e19fd5c3-ad50-45fb-87cf-c4e6de241c4a)
 
  Running the Script
