@@ -1,9 +1,9 @@
 Practical 01: Writing a Batch Script to Create Directory Structure
 
-Objective
+Objective:
 This exercise aims to develop a batch script that automatically creates a structured set of folders based on specific criteria and standards.
 
-Requirements
+Requirements:
      -A text editor (such as Notepad++, Visual Studio Code, or Notepad).
      -Basic knowledge of Windows batch scripting and file organization.
      -A Windows operating system.
