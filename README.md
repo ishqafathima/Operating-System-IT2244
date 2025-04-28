@@ -97,6 +97,7 @@ Type the code below:
 
             
 Script Explanation
+
 echo off – Suppresses command echoing for a cleaner look.
 set /p birth_year=... – Prompts the user to input their birth year.
 %date:~10,4% – Extracts the current year from the system date.
@@ -104,6 +105,7 @@ set /a age=... – Calculates the difference between the current year and birth 
 echo – Prints the output.
 pause – Waits for user input before closing the window.
 
-Summary
+Summary:
+
 In this activity, we created a basic batch script to interact with the user, perform a simple calculation, and display the result. We practiced using essential commands like set, echo, and pause in Windows batch scripting.
 
