@@ -94,8 +94,8 @@ Steps to Create the Script
             Double-click to open and run it.
             Enter your birth year when prompted to see your age displayed.
 
-  Script Explanation
-  
+            
+Script Explanation
        echo off – Suppresses command echoing for a cleaner look.
        set /p birth_year=... – Prompts the user to input their birth year.
        %date:~10,4% – Extracts the current year from the system date.
