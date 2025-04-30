@@ -1,0 +1,273 @@
+Day_02(Practicals)
+
+Practical 01
+
+1.Problem Specification: Change the text and background color of CMD 
+
+2.Implementation:
+
+Syntax
+
+color xy
+
+x - represents the color of the Terminal’s background
+
+y - represents the color of the font on the Command Prompt Terminal.
+
+    0 = Black       8 = Gray
+    1 = Blue        9 = Light Blue
+    2 = Green       A = Light Green
+    3 = Aqua        B = Light Aqua
+    4 = Red         C = Light Red
+    5 = Purple      D = Light Purple
+    6 = Yellow      E = Light Yellow
+    7 = White       F = Bright White
+
+Replace 'x' with 'f' for a white background and 'y' with 'd' for a light purple font. 
+
+color fd
+
+3. Conclusion:
+
+The color fd command sets the Command Prompt background to white and the text color to light purple.
+This demonstrates how to customize the terminal's appearance using simple color codes.
+How to Open PuTTY and Connect to a Server
+
+    Open PuTTY – Search for “PuTTY” in your system and launch the application.
+
+    Enter Server IP – In the “Host Name” field, enter: 172.16.140.150
+
+    Start Connection – Click the Open button to initiate the connection.
+
+    Login – When prompted, enter your username and password (note: the password will not be visible while typing).
+
+        Password used: 789asd*
+
+    Connection Successful – You are now connected to the server.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Practical 02
+
+1. Implementation
+
+1)Create a file using touch command
+	-----------------------------------
+	syntax:
+	touch filename
+
+	command:
+	touch xyz.txt
+	
+	Example:
+	{ ~ }  » touch xyz.txt      
+	Output:
+	A text file named xyz created in the desktop
+-------------------------------------------------------------------------------------
+
+2)Input Data to a File Using vi or vim
+
+Syntax:
+
+vi filename.txt
+
+or
+
+vim filename.txt
+
+    If the file does not exist, this command will create it.
+
+Steps to Edit the File:
+
+    Open the file:
+
+    vi filename.txt
+
+    Enter Insert Mode:
+
+        Press i to switch to Insert mode.
+
+        You can now start typing your content.
+
+    Exit Insert Mode:
+
+        Press Esc to return to Command mode.
+
+    Save and Exit:
+
+        Type :wq and press Enter.
+
+    Explanation:
+
+        w = Write (save the file)
+
+        q = Quit the editor
+
+-----------------------------------------------------------------------------------------------------------------------
+3)To view the contents of a text file using more or less command
+
+more xyz.txt  
+less xyz.txt
+
+We use the more command to view the contents of a file one page at a time. However, 
+it only allows forward navigation. In contrast, the less command is more powerful—it lets us scroll both forward and backward through the
+ file and also provides search functionality. While more is simpler, less is better suited for viewing larger files or when searching 
+ within the file is necessary.
+ 
+ 4)List all files and directories using ls command 
+    -l = known as a long format that displays detailed information about files and directories.
+	-a = Represent all files Include hidden files and directories in the listing.
+	
+	ls -a (Example)
+	{ ~ }  » ls -a                                                                                  ~
+.              .local           .qn.sh.un~            a5.sh~     multi.sh~    q3_expr.sh~
+..             .minttyrc        .qn2.sh.un~           a6.sh      num2.sh      Q33.sh
+.a.sh.swp      .mul.sh.un~      .qn3.sh.un~           a6.sh~     num2.sh~     Q33.sh~
+.a1.sh.un~     .multi.sh.un~    .qn4.sh.un~           a7.sh      p2.sh        q4.sh
+.a2.sh.un~     .num2.sh.un~     .vim                  a7.sh~     p2.sh~       q4.sh~
+.a3.sh.un~     .oh-my-zsh       .viminfo              a8.sh      pat.sh       q5.sh
+.a4.sh.un~     .p2.sh.un~       .zcompdump            abc.csv    pat.sh~      q5.sh~
+.a5.sh.un~     .pact            .zcompdump-Ish-5.0.6  abc.csv~   prgrm1.sh    q6.sh
+.a6.sh.un~     .pat.sh.un~      .zsh_history          abc.sh     prgrm1.sh~   q6.sh~
+.a7.sh.un~     .prgrm1.sh.un~   .zshrc                abc.sh~    prmsum.sh    qn.sh
+.a8.sh.swp     .prmsum.sh.un~   .zsh-update           bin        prmsum.sh~   qn.sh~
+.abc.csv.un~   .profile         ;                     cn.sh      ptrnnum.sh   qn2.sh
+.abc.sh.un~    .ptrnnum.sh.un~  a.sh                  cn.sh~     ptrnnum.sh~  qn2.sh~
+.babunrc       .Q1.sh.un~       a1.sh                 facto.sh   Q1.sh        qn3.sh
+.bash_profile  .Q2.sh.un~       a1.sh~                facto.sh~  Q1.sh~       qn3.sh~
+.bashrc        .Q22.sh.un~      a2.sh                 fbsum.sh   Q2.sh        qn4.sh
+.cn.sh.un~     .Q3.sh.un~       a2.sh~                fbsum.sh~  Q2.sh~       qn4.sh~
+.facto.sh.un~  .q3_expr.sh.un~  a3.sh                 fib.sh     
+
+ls -l(Example)
+{ ~ }  » ls -l                                                                                ~ 1
+total 55
+-rw-rwxr--+ 1 ishqa ishqa 223 Apr 22 14:32 ;
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr 28 00:14 a.sh
+-rwxrwxrwx+ 1 ishqa ishqa 278 Apr 24 20:31 a1.sh
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr 24 20:25 a1.sh~
+-rwxrwxrwx+ 1 ishqa ishqa 270 Apr 24 20:37 a2.sh
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr 24 20:32 a2.sh~
+-rwxrwxrwx+ 1 ishqa ishqa 232 Apr 24 20:41 a3.sh
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr 24 20:37 a3.sh~
+-rwxrwxrwx+ 1 ishqa ishqa 195 Apr 24 23:40 a4.sh
+-rwxrwxrwx+ 1 ishqa ishqa 193 Apr 24 21:45 a4.sh~
+-rwxrwxrwx+ 1 ishqa ishqa 391 Apr 25 06:08 a5.sh
+-rwxrwxrwx+ 1 ishqa ishqa 388 Apr 25 06:07 a5.sh~
+-rwxrwxrwx+ 1 ishqa ishqa 222 Apr 25 06:12 a6.sh
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr 25 06:09 a6.sh~
+-rwxrwxrwx+ 1 ishqa ishqa 333 Apr 25 06:30 a7.sh
+-rwxrwxrwx+ 1 ishqa ishqa 332 Apr 25 06:29 a7.sh~
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr 25 06:31 a8.sh
+-rwxrwxr--+ 1 ishqa ishqa 299 Apr 22 12:58 abc.csv
+-rwxrwxr--+ 1 ishqa ishqa 299 Apr 22 12:53 abc.csv~
+-rwxrwxr--+ 1 ishqa ishqa   4 Apr  5 20:57 abc.sh
+
+ls -ltr(Example)
+	{ ~ }  »                                                                                        ~
+{ ~ }  » ls -ltr                                                                              ~ 1
+total 55
+lrwxrwxrwx  1 ishqa ishqa  22 Apr  5 20:55 bin -> /home/ishqa/.local/bin
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr  5 20:57 abc.sh~
+-rwxrwxr--+ 1 ishqa ishqa   4 Apr  5 20:57 abc.sh
+-rwxrwxrwx+ 1 ishqa ishqa 272 Apr  6 10:18 Q3.sh~
+-rwxrwxr--+ 1 ishqa ishqa 299 Apr 22 12:53 abc.csv~
+-rwxrwxr--+ 1 ishqa ishqa 299 Apr 22 12:58 abc.csv
+-rw-rwxr--+ 1 ishqa ishqa   0 Apr 22 13:12 Q1.sh~
+-rwxrwxrwx+ 1 ishqa ishqa 173 Apr 22 13:17 Q1.sh
+-rwxrwxrwx+ 1 ishqa ishqa 176 Apr 22 13:47 Q22.sh~
+-rwsrwsrwt+ 1 ishqa ishqa 180 Apr 22 13:50 Q22.sh
+-rwxrwxrwx+ 1 ishqa ishqa 119 Apr 22 14:30 Q33.sh~
+-rw-rwxr--+ 1 ishqa ishqa 223 Apr 22 14:32 ;
+
+
+This command does the following:
+
+	-l → Long listing format (detailed view).
+
+	-t → Sort by modification time (newest first).
+
+	-r → Reverse the order (oldest first).
+	
+	--------------------------------------------------------------------------------------------------------------------------------
+	
+4)Create .csv file 
+	------------------
+	Syntax: vi filename.csv
+
+	example:
+	{ ~ }  » vi pqr.csv 
+	output:
+	A csv file named pqr is created in the desktop
+	
+	----------------------------------------------------------------------------------------------------------------------
+	
+	5)Search files using find command
+	---------------------------------
+	
+	Syntax: 
+	To Find a file by name:
+	find . -name "file.txt"
+	
+	example:
+	{ Desktop }  » find . -name "*.csv"                                                                                           
+	output:
+	{ Desktop }  » find . -name "*.csv"                                                                                               
+	./pqr.csv
+
+	Syntax:
+	To find all directories
+	find . -type d
+	
+	example:{ Desktop }  » find . -type d 
+	-----------------------------------------------------------------------------------------------------
+	6)To retrieve the number of lines in a file using wc command
+
+	The wc -l command counts the number of lines in a file or input provided
+
+	Syntax: wc -l filename.txt
+
+	example: 
+	{ Desktop }  » wc -l xyz.txt                                                                                                                                                               
+	output:
+	{ Desktop }  » wc -l xyz.txt                                                                                                     
+	4 xyz.txt
+	
+	----------------------------------------------------------------------------------------------------
+	9)Head and Tail commands
+	------------------------
+	Command to display first 5 lines of the pqr.csv file.
+ 
+	example:
+	head -n 5 pqr.csv
+	output:                                                                                            
+	{ Desktop }  »  head -n 5 pqr.csv                                                                                               
+	25,36,96,
+	14,22,32,
+	45,47,87,
+	67,54,21,
+	22,89,74,
+
+	Explanation of the syntax:
+	head: A command to show the first part of a file.
+	-n 5: Specifies to display the first 5 lines of the file.
+	pqr.csv: The input file.
+	
+	This command displays the last 2 lines of the pqr.csv file.
+
+	example:
+	tail -n 2 pqr.csv
+	output:
+	{ Desktop }  » tail -n 2 pqr.csv                                                                                                  
+	92,63,85,
+	45,78,89,
+
+	Explanation of the syntax:
+	tail: A command used to show the last part of a file.
+	-n 2: Specifies to display the last 2 lines of the file.
+	pqr.csv: The input file. 
+	------------------------------------------------------------------------------------
+	
+
+
+
