@@ -45,8 +45,6 @@
 
 ![12](https://github.com/user-attachments/assets/c9289096-f5f3-481d-a6fb-8b062c9d4204)
 
-13.
-
 
 
 
