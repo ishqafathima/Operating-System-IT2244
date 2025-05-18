@@ -16,6 +16,47 @@
 
 5.declare multiple variables in single lines
 
+![5](https://github.com/user-attachments/assets/a3183201-4f85-442d-b050-2cc5190ef05c)
+
+6.Data types
+
+![6](https://github.com/user-attachments/assets/3ba8866e-9fbe-4604-828b-d5d4c4223b27)
+
+7.Double numbers
+
+![7](https://github.com/user-attachments/assets/ca565655-8500-4a6a-be64-8c4bc6d6c7be)
+
+8.Floating numbers
+
+![8](https://github.com/user-attachments/assets/ac26e280-813a-4b28-abd6-260dfa783ff3)
+
+9.Character
+![9](https://github.com/user-attachments/assets/e995a9b2-44b2-4ea7-81e9-f3dc2ccfeca4)
+
+10.Take input from user
+
+![10](https://github.com/user-attachments/assets/34539756-f5e8-4c87-9819-663a2e96d5e0)
+
+11.
+
+![11](https://github.com/user-attachments/assets/5e2710c4-1c0e-4494-a396-e541fb730e17)
+
+12.arithmetic operators
+
+![12](https://github.com/user-attachments/assets/c9289096-f5f3-481d-a6fb-8b062c9d4204)
+
+13.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
