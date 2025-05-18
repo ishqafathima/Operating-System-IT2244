@@ -1,0 +1,288 @@
+16.05.2025 Codes
+-------------------------------------------------------------------------------------------------------------------------------------------
+1.Type hello world in C code
+
+#include<stdio.h>
+
+int main() {
+  printf("Hello World!");
+  return 0;
+}
+
+Output:
+
+[2021ict24@fedora ~]$ ./first
+Hello World![2021ict24@fedora ~]$
+
+-#include <stdio.h> : allows use of input/output
+-printf : is to display output (text or variables) to the screen in C programs.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+2.Variables
+int age; //store integer value
+age=25;
+int age =25;
+
+#include<stdio.h>
+int main()
+{
+int age=25;
+printf("%d",age);
+}
+
+Output:
+[2021ict24@fedora ~]$ ./var
+25[2021ict24@fedora ~]$ ^C
+
+-printf("%d",age) : prints the integer value of the variable age.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+3.Assign new value for same variable
+
+#include<stdio.h>
+int main()
+{
+int age=25;
+printf("%d",age);
+
+printf("\nC programming");
+
+age=31;
+printf("\nNew age:%d",age);
+}
+
+Output:
+[2021ict24@fedora ~]$ ./var2
+25C programming
+New age:31[2021ict24@fedora ~]$
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+4.
+#include<stdio.h>
+int main()
+{
+int firstNumber=25;
+printf("Firstnumber: %d",firstNumber);
+
+int secondNumber=firstNumber;
+printf("\nSecondNumber: %d",secondNumber);
+return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ gcc var3.c -o var3
+[2021ict24@fedora ~]$ ./var3
+Firstnumber: 25SecondNumber: 25[2021ict24@fedora ~]$
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+5.declare multiple variables in single lines
+
+#include<stdio.h>
+int main()
+{
+int firstNumber,secondNumber=25;
+printf("%d",firstNumber);
+printf("\n%d",secondNumber);
+return 0;
+}
+
+Output:
+
+[2021ict24@fedora ~]$ gcc single.c -o single
+[2021ict24@fedora ~]$ ./single
+1
+25[2021ict24@fedora ~]$
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+6.Data types
+#include<stdio.h>
+int main()
+{
+int age=10;
+printf("%d",age);
+
+printf("\nsize: %zu",sizeof(age));
+return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ ./data1
+10
+size: 4[2021ict24@fedora ~]$
+
+-%zu : prints the result of sizeof, which is of type size_t.
+-sizeof : gives the size (in bytes) of a variable or data type in C.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+7.Double numbers
+
+#include<stdio.h>
+int main()
+{
+double number=12.45;
+printf("%.2lf",number);//12.450000 (6 bytes)
+return 0;
+}
+
+Output:
+
+[2021ict24@fedora ~]$ gcc double1.c -o double1
+[2021ict24@fedora ~]$ ./double1
+12.45[2021ict24@fedora ~]$
+
+
+[2021ict24@fedora ~]$ ./double1
+12.450000[2021ict24@fedora ~]$
+
+-%.2lf : prints a double with 2 decimal places
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+8.Floating numbers
+
+#include<stdio.h>
+int main()
+{
+  float num=10.9f;
+  printf("%f",num);
+  printf("\n%.1f",num);
+  return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ ./float
+10.900000
+10.9[2021ict24@fedora ~]$
+
+-%f : prints a floating-point number (float or double) in decimal notation.
+-%.1f : prints a floating-point number rounded to 1 decimal place.
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+9.Character
+
+#include<stdio.h>
+int main()
+{
+char character='z';
+printf("%c",character);
+printf("\n%d",character);
+return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ ./char
+z
+122[2021ict24@fedora ~]$
+
+-%c : prints a single character.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+10.Take input from user
+
+#include<stdio.h>
+int main()
+{
+int age;
+printf("Enter your age: ");
+//printf("%d",age);
+
+scanf("%d",&age);
+
+printf("Age=%d",age);
+return 0;
+}
+
+Output:
+
+
+[2021ict24@fedora ~]$ ./input
+Enter your age: 23
+Age=23[2021ict24@fedora ~]$
+
+-scanf : reads input from the user and stores it in a variable.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+11.Character
+#include<stdio.h>
+int main()
+{
+double num;
+char alpha;
+printf("Enter  inputs : ");
+
+
+scanf("%lf %c",&num,&alpha);
+
+
+
+return 0;
+}
+
+Output:
+
+[2021ict24@fedora ~]$ gcc input1.c -o input1
+[2021ict24@fedora ~]$ ./input1
+Enter  inputs : 39.9  ish
+[2021ict24@fedora ~]$
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+***
+
+//-single live comments ctrl+/
+/* */- multiple comments ctrl+shift+/
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+12
+C operators
+arithmetic operators
++
+-
+*
+/
+%-remainder
+
+#include<stdio.h>
+int main()
+{
+int num1,num2;
+printf("Enter a number1: ");
+scanf("%d",&num1);
+printf("\nEnter a number2: ");
+scanf("%d",&num2);
+
+int sum=num1+num2;
+int sub=num1-num2;
+int mul=num1*num2;
+int div=num1/num2;
+int remind=num1%num2;
+
+printf("\nSummation: %d",sum);
+printf("\nSubstraction: %d",sub);
+printf("\nMultiplication: %d",mul);
+printf("\nDivision: %d",div);
+printf("\nReminder: %d",remind);
+return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ ./arith
+Enter a number1: 4
+
+Enter a number2: 2
+
+Summation: 6
+Substraction: 2
+Multiplication: 8
+Division: 2
+Reminder: 0[2021ict24@fedora ~]$
