@@ -1,0 +1,204 @@
+22.05.2025 Practical
+
+1.
+#include<stdio.h>
+#include<unistd.h> //used to get pid and fork() functionality
+int main()
+{
+	fork();
+	printf("Hello world\n");
+
+	return 0;
+
+}
+
+
+
+[2021ict24@fedora ~]$ gcc p7.c -o p7
+[2021ict24@fedora ~]$ ./p7
+Hello world
+Hello world
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+2.
+#include<stdio.h>
+#include<unistd.h> 
+int main()
+{
+	fork();
+	fork();
+	printf("Hello world\n");
+
+	return 0;
+
+}
+
+
+
+[2021ict24@fedora ~]$ gcc p8.c -o p8
+[2021ict24@fedora ~]$ ./p8
+Hello world
+Hello world
+Hello world
+Hello world
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+3.
+
+#include<stdio.h>
+#include<unistd.h> 
+int main()
+{
+	int f = fork();
+	
+	if(f==0)
+	{
+		printf("I am Child\n");
+	}
+	else{
+		printf("I am parent\n");
+	}
+ 
+	return 0;
+
+}
+
+
+
+[2021ict24@fedora ~]$ gcc p9.c -o p9
+[2021ict24@fedora ~]$ ./p9
+I am parent
+I am Child
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+4.
+
+print numbers from 1 to 10.
+1 to 5 should be print by child process and
+from 6 to should be parent process 
+calculate summation of those numbers
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+int main() 
+{
+    pid_t pid;
+    int sum = 0;
+
+    pid = fork();
+
+    if (pid < 0) 
+	{
+        printf("Failed to fork process\n");
+        return 1;
+    } 
+	else if (pid == 0) // Child process
+	{ 
+        printf("Child process printing numbers:\n");
+        for (int i = 1; i <= 5; i++) 
+		{
+            printf("%d\n", i);
+            sum += i;
+        }
+        printf("Child process sum: %d\n", sum);
+    } 
+	else // Parent process
+	{ 
+        wait(NULL); // Wait for child process to finish
+        sum = 0;
+        printf("Parent process printing numbers:\n");
+        for (int i = 6; i <= 10; i++) 
+		{
+            printf("%d\n", i);
+            sum += i;
+        }
+        printf("Parent process sum: %d\n", sum);
+        printf("Total sum: %d\n", sum + 15); // Adding child process sum (1+2+3+4+5 = 15)
+    }
+
+    return 0;
+}
+
+
+
+
+[2021ict24@fedora ~]$ gcc p10.c -o p10
+[2021ict24@fedora ~]$ ./p10
+
+Child process printing numbers:
+1
+2
+3
+4
+5
+Child process sum: 15
+Parent process printing numbers:
+6
+7
+8
+9
+10
+Parent process sum: 40
+Total sum: 55
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+5.
+
+#include<stdio.h>
+#include<unistd.h> 
+int main()
+{
+	int id=fork();
+	int n;
+	
+	if(id==0)
+	{
+		n=1;
+	}
+	else
+	{
+		n=6;
+	}
+	
+	for(int i=n; i<n+5; i++)
+	{
+		printf("%d", i);
+	}
+	printf("\n");
+	
+	
+	return 0;
+
+}
+
+
+[2021ict24@fedora ~]$ gcc p11.c -o p11
+[2021ict24@fedora ~]$ ./p11
+
+678910
+12345
+
+
+
+Conclusion:
+    Program 1 – One fork(): 2 processes → prints "Hello world" twice.
+
+    Program 2 – Two fork()s: 4 processes → prints "Hello world" 4 times.
+
+    Program 3 – Fork with if: Child says "I am Child", parent says "I am parent".
+
+    Program 4 – Child prints 1–5, parent prints 6–10 → total sum = 55.
+
+    Program 5 – Child prints 1–5, parent prints 6–10 using loop.
+
+ Key Concept: fork() creates separate processes; each executes code independently.
+
