@@ -1,0 +1,352 @@
+31.05.2025
+
+1.
+#include <stdio.h>
+#include <sys/ipc.h> //for inter process communication
+#include <sys/msg.h> //for message passing
+#define MAX 100    //declarinmg maximum size
+
+//structure for message queue
+struct mesg_buffer {
+	long mesg_type;
+	char mesg_text[100];
+}
+message;
+int main(){
+	key_t key;
+	int msgid;
+ 
+//ftok to generate unique key
+key = ftok("2021ict24",65);
+
+//msgget creates a message queue
+// and returns identifier
+msgid = msgget(key, 0666 | IPC_CREAT);
+message.mesg_type = 1;
+printf("Write Data : ");
+fgets(message.mesg_text,MAX,stdin);
+
+//msgsnd to send message
+msgsnd(msgid,&message,sizeof(message),0);
+
+//display the message
+printf("Data send is : %s \n",message.mesg_text);
+ 	
+
+//receive
+
+
+//msgrcv to receive message
+msgrcv(msgid,&message,sizeof(message),1,0);
+//display the message
+printf("Data received is : %s \n",message.mesg_text);
+//to destroy the message queue
+msgctl(msgid , IPC_RMID,NULL);
+return 0;	
+}
+
+
+
+
+touch 2021ICT24
+chmod 644 2021ICT24
+vi 
+
+[2021ict24@fedora ~]$ vi send.c
+[2021ict24@fedora ~]$ gcc send.c -o send
+[2021ict24@fedora ~]$ ./send
+Write Data : ishhqa
+Data send is : ishhqa
+
+Data received is : ishhqa
+
+----------------------------------------------------------------------------------------------------------------------------
+
+2.
+//send
+#include<stdio.h>
+#include<sys/ipc.h> //for inter process communication
+#include<sys/msg.h> //for message passing
+#define MAX 10 //declaring maximum size
+
+//structure for message queue
+struct mesg_buffer{
+	long mesg_type;
+	char mesg_text[100];
+}message;
+
+int main()
+{
+	key_t key;
+	int msgid;
+	
+	//ftok to generate unique key
+	key = ftok("2021ICT24",65);
+	
+	//msgset creates a message queue
+	//and return identifier
+	msgid = msgget(key, 0666 | IPC_CREAT);
+	message.mesg_type=1;
+	printf("Write data : ");
+	fgets(message.mesg_text,MAX,stdin);
+	//msgsnd to send message
+	msgsnd(msgid,&message,sizeof(message.mesg_text),0);
+	//display the message
+	printf("Data send is : %s \n" , message.mesg_text);
+return 0;	
+}
+
+[2021ict24@fedora ~]$ ^C
+[2021ict24@fedora ~]$ vi m1.c
+[2021ict24@fedora ~]$ gcc m1.c -o m1
+[2021ict24@fedora ~]$ ./m1
+Write data : ish
+Data send is : ish
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+//recieve 
+#include<stdio.h>
+#include<sys/ipc.h>
+#include<sys/msg.h>
+
+//structure for message queue
+struct mesg_buffer
+{
+	long mesg_type;
+	char mesg_text[100];
+}message;
+int main()
+{
+	key_t key;
+	int msgid;
+	
+	//ftok to generate unique key
+	key = ftok("2021ICT24",65);
+	
+	//msgset creates a message queue
+	//and return identifier
+	msgid = msgget(key, 0666 | IPC_CREAT);
+	//msgrcv to recieve message
+	msgrcv(msgid, &message, sizeof(message),1,0);
+	//display the message
+	printf("Data Recieved is : %s \n",message.mesg_text);
+
+    //to destroy thye message queue	
+	msgctl(msgid, IPC_RMID,NULL);
+	return 0;
+	
+	
+}
+
+vi send1.c
+vi recieve1.c
+
+gcc send1.c -o send1
+gcc receive1.c -o receive1
+
+./send1
+./receive1
+
+[2021ict24@fedora ~]$ gcc receive1.c -o receive1
+[2021ict24@fedora ~]$ ./send1
+Write data : ish
+Data send is : ish
+
+[2021ict24@fedora ~]$ ./receive1
+Data Recieved is : ish
+
+[2021ict24@fedora ~]$
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+3.
+Exercise
+
+IPC using message queue
+
+read inputs from the parent process
+Enter Name:ish
+Enter RegNo:2021ict24
+Enter Age:23
+
+Message sent successfully.
+
+give ther output from child process
+Recieved Name: ish
+Recieved RegNo:2021ict24
+Recieved Age:23
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+#define MAX_SIZE 100
+
+// Structure for message queue
+struct message {
+    long msg_type;
+   char name[MAX_SIZE];
+    char regNo[MAX_SIZE];
+    int age;
+};
+
+int main() {
+    key_t key;
+    int msgid;
+
+    // Generate unique key
+    key = ftok("progfile", 65);
+
+    // Create message queue
+    msgid = msgget(key, 0666 | IPC_CREAT);
+
+    if (msgid == -1) {
+        perror("msgget failed");
+        exit(1);
+    }
+
+    struct message msg;
+    msg.msg_type = 1;
+
+    // Parent process: Send data
+    printf("Enter Name: ");
+    scanf("%s", msg.name);
+    printf("Enter RegNo: ");
+    scanf("%s", msg.regNo);
+    printf("Enter Age: ");
+    scanf("%d", &msg.age);
+
+    msgsnd(msgid, &msg, sizeof(msg) - sizeof(long), 0);
+    printf("Message sent successfully.\n");
+
+    // Child process: Receive data
+    msgrcv(msgid, &msg, sizeof(msg) - sizeof(long), 1, 0);
+    printf("Received Name: %s\n", msg.name);
+    printf("Received RegNo: %s\n", msg.regNo);
+    printf("Received Age: %d\n", msg.age);
+
+    // Destroy the message queue
+    msgctl(msgid, IPC_RMID, NULL);
+
+    return 0;
+}
+
+[2021ict24@fedora ~]$ ./send3
+Enter Name: ish
+Enter RegNo: ict24
+Enter Age: 23
+Message sent successfully.
+Received Name: ish
+Received RegNo: ict24
+Received Age: 23
+[2021ict24@fedora ~]$
+
+[2021ict24@fedora ~]$ ./send3
+Enter Name: ishqalafir
+Enter RegNo: 2021ict24
+Enter Age: 23
+Message sent successfully.
+Received Name: ishqalafir
+Received RegNo: 2021ict24
+Received Age: 23
+[2021ict24@fedora ~]$
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+//Shared code
+
+#include <sys/msg.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#define MSGKEY 1111
+#define MAX_NAME_LEN 100
+#define MAX_REGNO_LEN 100
+
+struct person {
+    long mtype; // Message type
+    int age;
+    char name[MAX_NAME_LEN];
+    char regno[MAX_REGNO_LEN];
+};
+
+int main() {
+    int msqid;
+    struct person p1, p2;
+    int f = fork();
+
+    if (f == 0) {
+        // Child process: Receiver
+        msqid = msgget(MSGKEY, IPC_CREAT | 0666); 
+        if (msqid == -1) {
+            perror("msgget failed");
+            exit(EXIT_FAILURE);
+        }
+
+        int msg_size = sizeof(struct person) - sizeof(long);
+
+        if (msgrcv(msqid, &p2, msg_size, 0, 0) == -1) {
+            perror("msgrcv failed");
+            exit(EXIT_FAILURE);
+        } else {
+            printf("Received Name: %s\n", p2.name);
+            printf("Received RegNo: %s\n", p2.regno);
+            printf("Received Age: %d\n", p2.age);
+        }
+
+        if (msgctl(msqid, IPC_RMID, NULL) == -1) {
+            perror("msgctl failed");
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        // Parent process: Sender
+        msqid = msgget(MSGKEY, IPC_CREAT | 0666);
+        if (msqid == -1) {
+            perror("msgget failed");
+            exit(EXIT_FAILURE);
+        }
+
+        p1.mtype = 1;
+
+        printf("Enter Name: ");
+        scanf("%s", p1.name);
+
+        printf("Enter RegNo: ");
+        scanf("%s", p1.regno);
+
+        printf("Enter Age: ");
+        scanf("%d", &p1.age);
+
+        int msg_size = sizeof(struct person) - sizeof(long);
+
+        if (msgsnd(msqid, &p1, msg_size, IPC_NOWAIT) == -1) {
+            perror("msgsnd failed");
+        } else {
+            printf("Message sent successfully.\n");
+        }
+
+        exit(0);
+    }
+
+    return 0;
+}
+
+
+Conclusion:
+IPC using message queues in C allows processes to communicate by sending and receiving structured messages via a kernel-managed queue. 
+It uses ftok(), msgget(), msgsnd(), and msgrcv() for data transfer, and msgctl() to remove the queue. 
+This method supports asynchronous, reliable communication between processes—whether in the same program or across different ones.
+
+
+
+
+
+
