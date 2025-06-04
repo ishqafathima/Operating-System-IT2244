@@ -1,0 +1,280 @@
+02.06.2025Practical
+//writer
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<sys/ipc.h>
+#include<sys/shm.h>
+
+#define SHM_SIZE 1024 //size of shared memory segment 
+
+int main()
+{
+	key_t key=ftok("shmfile",65);//generate unique key
+	int shmid=shmget(key,SHM_SIZE,IPC_CREAT | 0666); // Create shared memory segment
+	if(shmid== -1)
+	{
+		perror("shmget");
+		exit(1);
+	}
+	
+	char *shmaddr = (char*) shmat(shmid,NULL, 0); //attach to shared memory
+	if (shmaddr == (char*)-1)
+	{
+		perror("shmat");
+		exit(1);
+	}
+	printf("Write data");
+	fgets(shmaddr,SHM_SIZE,stdin); //write data to shared memory
+	
+	printf("Data written in memory: %s\n ",shmaddr);
+   shmdt(shmaddr); //Detach from shared memory
+	return 0;
+}
+
+//reader
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<sys/ipc.h>
+#include<sys/shm.h>
+
+#define SHM_SIZE 1024 //size of shared memory segment 
+
+int main()
+{
+	key_t key=ftok("shmfile",65);
+	int shmid=shmget(key,SHM_SIZE,0666); // Access shared memory segment
+	if(shmid== -1)
+	{
+		perror("shmget");
+		exit(1);
+	}
+	char *shmaddr = (char*) shmat(shmid,NULL, 0); //attach to shared memory
+	if (shmaddr == (char*)-1)
+	{
+		perror("shmat");
+		exit(1);
+	}
+	
+	printf("Data read from memory: %s\n",shmaddr);//read data from shared memory
+	
+	shmdt(shmaddr);// detach from shared memory
+	
+	shmctl(shmid, IPC_RMID,NULL); //Remove shared memory segment
+	return 0;	
+}
+
+
+ gcc write.c -o write
+[2021ict24@fedora ~]$ gcc read.c -o read
+[2021ict24@fedora ~]$ ./write
+Write data: ish
+Data written in memory: ish
+
+ [2021ict24@fedora ~]$ ./read
+Data read from memory: ish
+
+----------------------------------------------------------------------------------------------------------------------------
+
+User going to input 5,2 to parent process,
+parent sent 5,2 to shared memory,shared memory sent(5,2)to child process,child process calculate factorial and return 5!,2!
+shared memory return 5! ,2! to parent process
+and parent process print nPr, nCr
+
+
+
+
+//in one codes
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/shm.h>
+#include <sys/ipc.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+// Function to compute factorial
+long factorial(int n) {
+    if (n == 0 || n == 1) return 1;
+    return n * factorial(n - 1);
+}
+
+// Function to calculate nPr and nCr
+void calculate_nPr_nCr(int n, int r) {
+    long n_fact = factorial(n);
+    long r_fact = factorial(r);
+    long nr_fact = factorial(n - r);
+    
+    long nPr = n_fact / nr_fact;
+    long nCr = nPr / r_fact;
+
+    printf("nPr: %ld\n", nPr);
+    printf("nCr: %ld\n", nCr);
+}
+
+int main() {
+    key_t key = ftok("shmfile", 65); // Generate unique key
+    int shmid = shmget(key, 2 * sizeof(int), 0666 | IPC_CREAT); // Create shared memory
+    int *shared_mem = (int *)shmat(shmid, (void *)0, 0); // Attach shared memory
+
+    int n = 5, r = 2; // Example values
+    shared_mem[0] = n;
+    shared_mem[1] = r;
+    printf("Parent sent (%d, %d) to shared memory.\n", n, r);
+
+    pid_t pid = fork();
+    if (pid == 0) { // Child process
+        int child_n = shared_mem[0];
+        int child_r = shared_mem[1];
+        
+        long fact_n = factorial(child_n);
+        long fact_r = factorial(child_r);
+        
+        shared_mem[0] = fact_n;
+        shared_mem[1] = fact_r;
+        printf("Child calculated factorials: %d! = %ld, %d! = %ld\n", child_n, fact_n, child_r, fact_r);
+        exit(0);
+    } else { // Parent process
+        wait(NULL); // Wait for child process
+        long fact_n = shared_mem[0];
+        long fact_r = shared_mem[1];
+
+        printf("Shared memory returned: %d! = %ld, %d! = %ld\n", n, fact_n, r, fact_r);
+        calculate_nPr_nCr(n, r);
+
+        shmdt(shared_mem); // Detach shared memory
+        shmctl(shmid, IPC_RMID, NULL); // Remove shared memory
+    }
+
+    return 0;
+}
+
+//in different codes
+
+//Parent process
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/shm.h>
+#include <sys/ipc.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    key_t key = ftok("shmfile", 65); // Generate unique key
+    int shmid = shmget(key, 2 * sizeof(int), 0666 | IPC_CREAT); // Create shared memory
+    int *shared_mem = (int *)shmat(shmid, NULL, 0); // Attach shared memory
+
+    // Input values for factorial computation
+    int n = 5, r = 2;
+    shared_mem[0] = n;
+    shared_mem[1] = r;
+    printf("Parent: Sent (%d, %d) to shared memory.\n", n, r);
+
+    // Create child process
+    pid_t pid = fork();
+    if (pid == 0) {
+        execl("./child", "child", NULL); // Run child program
+    } else {
+        wait(NULL); // Wait for child to complete
+        long fact_n = shared_mem[0];
+        long fact_r = shared_mem[1];
+        printf("Parent: Received factorials → %d! = %ld, %d! = %ld\n", n, fact_n, r, fact_r);
+        
+        long nPr = fact_n / (fact_n / fact_r);
+        long nCr = nPr / fact_r;
+
+        printf("Parent: nPr = %ld, nCr = %ld\n", nPr, nCr);
+
+        shmdt(shared_mem); // Detach shared memory
+        shmctl(shmid, IPC_RMID, NULL); // Remove shared memory
+    }
+
+    return 0;
+}
+
+//child process
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/shm.h>
+#include <sys/ipc.h>
+
+long factorial(int n) {
+    return (n == 0 || n == 1) ? 1 : n * factorial(n - 1);
+}
+
+int main() {
+    key_t key = ftok("shmfile", 65); // Generate unique key
+    int shmid = shmget(key, 2 * sizeof(int), 0666); // Access shared memory
+    int *shared_mem = (int *)shmat(shmid, NULL, 0); // Attach shared memory
+
+    int n = shared_mem[0];
+    int r = shared_mem[1];
+
+    shared_mem[0] = factorial(n);
+    shared_mem[1] = factorial(r);
+
+    printf("Child: Computed %d! = %ld, %d! = %ld\n", n, shared_mem[0], r, shared_mem[1]);
+
+    shmdt(shared_mem); // Detach shared memory
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+
+//shared drive codes
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <sys/wait.h>
+
+int main() {
+    size_t size = 4096;
+    char *shared_mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
+	MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    if (shared_mem == MAP_FAILED) {
+        perror("mmap failed");
+        exit(1);
+    }
+
+    pid_t pid = fork();
+    if (pid == 0) {
+        // Child process
+        sprintf(shared_mem, "Hello from child!");
+        printf("Child wrote: %s\n", shared_mem);
+        exit(0);
+    } else if (pid > 0) {
+        // Parent process
+        wait(NULL); // Wait for child to finish
+        printf("Parent read: %s\n", shared_mem);
+        munmap(shared_mem, size);
+    } else {
+        perror("fork failed");
+        exit(1);
+    }
+
+    return 0;
+}
+
+{ ~ }  » touch shred.c
+{ ~ }  » vi shared.c
+{ ~ }  » gcc shared.c -o shared                                                          ~
+{ ~ }  » ./shared                                                                        ~
+Child wrote: Hello from child!
+Parent read: Hello from child!
+{ ~ }  »                
