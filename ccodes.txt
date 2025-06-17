@@ -1,0 +1,184 @@
+16.06.2025 Practicals
+
+1.
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<pthread.h>
+
+//A normal C function that is executed as a thread
+//when its name is specified in pthread_create()
+void *helloWorld(void *vargp)
+{
+	sleep(1);
+	printf("Hello world \n");
+	return NULL;
+}
+
+int main()
+{
+	pthread_t thread_id;
+	printf("Before Thread\n");
+	pthread_create(&thread_id,NULL,helloWorld,NULL);
+	pthread_join(thread_id,NULL);
+	printf("After Thread\n");
+	exit(0);
+}
+
+Output:
+[2021ict24@fedora ~]$ vi p1.c
+[2021ict24@fedora ~]$ gcc p1.c -o p1
+[2021ict24@fedora ~]$ ./p1
+Before Thread
+Hello world
+After Thread
+
+------------------------------------------------------------------------------------------------------------------------------
+
+2.
+//multi-threaded process
+
+#include<stdio.h>
+#include<pthread.h>
+
+//Function to be executed by the thread
+void * print_message(void* arg)
+{
+	char * message=(char*)arg;
+	printf("%s\n",message);
+	return NULL;
+}
+int main()
+{
+	pthread_t thread1, thread2;
+	
+	//create first thread
+	pthread_create(&thread1, NULL, print_message,"Hello from Thread 1!");
+	
+	//create second thread
+	pthread_create(&thread2, NULL, print_message, "Hello from Thread 2!");
+	
+	//wait for both threads to finish
+	pthread_join(thread1, NULL);
+	pthread_join(thread2,NULL);
+	
+	printf("Both threads completed.\n");
+	return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ vi p2.c
+[2021ict24@fedora ~]$ gcc p2.c -o p2
+[2021ict24@fedora ~]$ ./p2
+Hello from Thread 1!
+Hello from Thread 2!
+Both threads completed.
+
+----------------------------------------------------------------------------------------------------------------------------
+
+3.
+//Basic thread creation
+#include<stdio.h>
+#include<pthread.h>
+
+void * print_message(void* arg)
+{
+	char * message=(char*)arg;
+	printf("%s\n",message);
+	return NULL;
+}
+
+
+int main()
+{
+	pthread_t threads[3];
+	char* messages[]={
+		"Thread 1 says Hi!",
+		"Thread 2 says hello!",
+		"Thread 3 says hey!"
+	};
+	
+	for(int i=0; i<3; i++)
+	{
+		pthread_create(&threads[i], NULL,print_message,messages[i]);
+	}
+	for(int i=0; i<3; i++)
+	{
+		pthread_join(threads[i],NULL);
+	}
+	
+	printf("All threads done.");
+	return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ vi p3.c
+[2021ict24@fedora ~]$ gcc p3.c -o p3
+[2021ict24@fedora ~]$ ./p3
+Thread 1 says Hi!
+Thread 2 says hello!
+Thread 3 says hey!
+
+----------------------------------------------------------------------------------------------------------------------------
+
+4.
+//Using Threads to compute Parts of a sum(Parallel sum)
+#include<stdio.h>
+#include<pthread.h>
+
+#define SIZE 6
+
+int arr[SIZE]={1,2,3,4,5,6};
+int sum1=0, sum2=0;
+
+void* sum_part1(void* arg)
+{
+	for(int i=0; i<SIZE/2; i++)
+	{
+		sum1 += arr[i];
+	}
+	return NULL;
+}
+
+void* sum_part2(void* arg)
+{
+	for (int i=SIZE/2; i< SIZE; i++)
+	{
+		sum2 += arr[i];
+	}
+	return NULL;
+}
+
+int main()
+{
+	pthread_t t1, t2;
+	
+	pthread_create(&t1,NULL,sum_part1,NULL);
+	pthread_create(&t2,NULL,sum_part2,NULL);
+	
+	pthread_join(t1,NULL);
+	pthread_join(t2,NULL);
+	
+	printf("Total sum= %d\n",sum1+sum2);
+	return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ vi p4.c
+[2021ict24@fedora ~]$ gcc p4.c -o p4
+[2021ict24@fedora ~]$ ./p4
+Total sum= 21
+
+Conclusion:
+These four programs demonstrate the basics and power of multi-threading in C:
+
+  1.Basic Thread Creation – Shows how a single thread can run a function in parallel with the main process.
+
+  2.Multiple Threads – Demonstrates how to run multiple threads concurrently, each executing a different message.
+
+  3.Thread Array – Creates several threads in a loop, each printing a unique message, highlighting scalability.
+
+  4.Parallel Computation – Uses two threads to compute parts of a sum in parallel, improving performance.
+
+Threads allow concurrent execution in programs, enabling better CPU utilization and faster performance, 
+especially in tasks like parallel computations. The pthread library in C provides a powerful way to implement multi-threading efficiently.
