@@ -1,0 +1,138 @@
+20.05.2025 Practicals
+
+1.
+
+
+#include<stdio.h>
+#include<unistd.h>
+int main()
+{
+	printf("\nHello world");
+	int f = fork();
+	int p = getpid();
+	printf("\n the pid is %d",p);
+	
+	printf("\n the pid is %d", f);
+	return 0;
+
+}
+
+Output:
+
+{ ~ }  » ./p2                                                                            ~
+
+Hello world
+ the pid is 2984
+Hello world
+ the pid is 2716
+ the pid is 0 the pid is 2716% 
+ 
+ 
+ --------------------------------------------------------------------------------------------------------
+ 
+2.
+
+#include<stdio.h>
+#include<unistd.h>
+int main()
+{
+	fork();
+	fork();
+	printf("\nHello world\n");
+	
+	return 0;
+
+}
+
+Output:
+{ ~ }  » gcc p3.c -o p3                                                                  ~
+{ ~ }  » ./p3                                                                            ~
+
+
+Hello world
+Hello world
+
+
+Hello world
+Hello world
+
+--------------------------------------------------------------------------------------------------------
+
+3.
+
+#include<stdio.h>
+#include<unistd.h>
+int main()
+{
+	int f = fork();
+	
+	if(f==0)
+	{
+		printf("I am Child\n");
+	}
+	else{
+		printf("I am parent\n");
+	}
+	printf("\nHello world");
+	
+
+	return 0;
+
+}
+{ ~ }  » gcc p4.c -o p4                                                                  ~
+{ ~ }  » ./p4                                                                            ~
+I am Child
+I am parent
+
+
+Hello worldHello world
+
+--------------------------------------------------------------------------------------------------------
+
+4.
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    int f1 = fork(); 
+	
+    if (f1 == 0) 
+	{
+        printf("I am Child 1\n");
+		printf("My parent id %d\n", getpid());
+		int f2 = fork(); 
+		if (f2 == 0)
+		{
+			printf("I am sibiling");
+			printf("\nMy parent id %d\n", getpid());
+		}
+		
+	}
+ 
+
+    return 0;
+}
+
+{ ~ }  » gcc p5.c -o p5                                                                  ~
+{ ~ }  » ./p5                                                                            ~
+I am Child 1
+My parent id 3048
+I am sibiling
+My parent id 19920
+
+
+Conclusion:
+#include<stdio.h>  - Includes the standard I/O library and
+#include<unistd.h> - the Unix standard library for system calls like fork() and getpid().
+
+int f = fork() - 
+fork() creates a new child process.
+It returns 0 to the child process, and returns the PID of the child to the parent process.
+After this call, both parent and child continue executing the next lines.
+
+int p = getpid() -
+Retrieves the process ID of the currently running process (both parent and child will call this).
+
+fork() - creates a new process.
+getpid() - gives the current process ID.
