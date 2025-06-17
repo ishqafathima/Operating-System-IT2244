@@ -1,3 +1,8 @@
+1.
+
+3rd Qn
+
+![1](https://github.com/user-attachments/assets/df6f10ef-781c-4197-9a63-460140d386ee)
 
 
 
