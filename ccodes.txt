@@ -1,0 +1,239 @@
+20.06.2025 Practical
+
+Q1.Write a C program that creates two threads.Each thread should print a message indicating it is running.
+The main thread should wait for both threads to finish before exiting.
+
+#include <pthread.h>
+#include <stdio.h>
+
+void* threadFunc(void* arg) {
+	
+    printf("Thread %s is running.\n", (char*)arg);
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+    pthread_create(&t1, NULL, threadFunc, "1");
+    pthread_create(&t2, NULL, threadFunc, "2");
+
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    printf("Main thread: Both threads finished.\n");
+    return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ vi u1.c
+[2021ict24@fedora ~]$ gcc u1.c -o u1
+[2021ict24@fedora ~]$ ./u1
+Thread 1 is running.
+Thread 2 is running.
+Main thread: Both threads finished.
+[2021ict24@fedora ~]$
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+Q2.Write a program to create 5 threads.Each hread should print its thread ID and then exit.
+The main thread should join all threads and print a completion message.
+
+#include <pthread.h>
+#include <stdio.h>
+
+void* threadFunc(void* arg) {
+    long id = (long)arg;
+    printf("Thread ID: %ld\n", id);
+    return NULL;
+}
+
+int main() {
+    pthread_t threads[5];
+    for (long i = 0; i < 5; ++i) {
+        pthread_create(&threads[i], NULL, threadFunc, (void*)i);
+    }
+
+    for (int i = 0; i < 5; ++i) {
+        pthread_join(threads[i], NULL);
+    }
+
+    printf("Main thread: All threads completed.\n");
+    return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ vi u2.c
+[2021ict24@fedora ~]$ gcc u2.c -o u2
+[2021ict24@fedora ~]$ ./u2
+Thread ID: 0
+Thread ID: 1
+Thread ID: 2
+Thread ID: 3
+Thread ID: 4
+Main thread: All threads completed.
+[2021ict24@fedora ~]$
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+Q3.Write a program that creates a thread which prints numbers from 1 to 10 with a 1-second delay
+between each number.The main thread should wait for this thread to finish.
+
+#include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+
+void* countFunc(void* arg) {
+    for (int i = 1; i <= 10; ++i) {
+        printf("%d\n", i);
+        sleep(1);  // 1 second delay
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t counterThread;
+    pthread_create(&counterThread, NULL, countFunc, NULL);
+    pthread_join(counterThread, NULL);
+    printf("Main thread: Counting finished.\n");
+    return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ ^C
+[2021ict24@fedora ~]$ vi u3.c
+[2021ict24@fedora ~]$ gcc u3.c -o u3
+[2021ict24@fedora ~]$ ./u3
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+Main thread: Counting finished.
+
+----------------------------------------------------------------------------------------------------------------------------
+
+
+Q4.Create two threads where one thread increments a global counter 100 times and the other 
+thread decrements the same counter 100 times.
+print the final value of the counter after both threads finish.
+
+#include <pthread.h>
+#include <stdio.h>
+
+int counter = 0;
+pthread_mutex_t lock;
+
+void* increment(void* arg) {
+    for (int i = 0; i < 100; ++i) {
+        pthread_mutex_lock(&lock);
+        counter++;
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+void* decrement(void* arg) {
+    for (int i = 0; i < 100; ++i) {
+        pthread_mutex_lock(&lock);
+        counter--;
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t t1, t2;
+    pthread_mutex_init(&lock, NULL);
+
+    pthread_create(&t1, NULL, increment, NULL);
+    pthread_create(&t2, NULL, decrement, NULL);
+
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    printf("Final counter value: %d\n", counter);
+    pthread_mutex_destroy(&lock);
+    return 0;
+}
+
+Output:
+[2021ict24@fedora ~]$ vi u4.c
+[2021ict24@fedora ~]$ gcc u4.c -o u4
+[2021ict24@fedora ~]$ ./u4
+Final counter value: 0
+
+-------------------------------------------------------------------------------------------------------------
+
+Q5.Implement a thread function that takes an integer argument,squares it,and returns the result 
+to the main thread using pthread_exit and pthread_join.
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void* squareFunc(void* arg) {
+    int num = *(int*)arg;
+    int* result = malloc(sizeof(int));
+    *result = num * num;
+    pthread_exit(result);
+}
+
+int main() {
+    pthread_t thread;
+    int value = 6;
+    int* result;
+
+    pthread_create(&thread, NULL, squareFunc, &value);
+    pthread_join(thread, (void**)&result);
+
+    printf("Square of %d is %d\n", value, *result);
+    free(result);
+    return 0;
+	
+}
+
+Output:
+[2021ict24@fedora ~]$ vi u5.c
+[2021ict24@fedora ~]$ gcc u5.c -o u5
+[2021ict24@fedora ~]$ ./u5
+Square of 6 is 36
+
+Conclusion:
+
+Q1: Two Threads Printing Messages
+
+    Creates 2 threads that each print a message.
+	pthread_join ensures main waits until both threads finish.
+	-pthread_join() is a POSIX thread function used to wait for a thread to finish execution.
+      (It blocks the main (or calling) thread until the specified thread completes.)
+	  
+Q2: 5 Threads Printing IDs
+
+    Creates 5 threads in a loop.
+	Each thread prints its ID (0–4).
+	Main waits for all with pthread_join.
+
+Q3: Count 1 to 10 with Delay
+
+    A thread prints numbers 1 to 10 with sleep(1) between each.
+	Main waits for counting to finish.
+
+Q4: Increment & Decrement Counter
+
+    Two threads:
+
+        One increments a global counter 100 times.
+		The other decrements it 100 times.
+
+    Mutex is used to safely access shared data.
+	Final result is 0.
+
+Q5: Square a Number and Return
+
+    A thread takes an integer (6), squares it, and returns the result.
+	Main thread retrieves result using pthread_join and prints it.
